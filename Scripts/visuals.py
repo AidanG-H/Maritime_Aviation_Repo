@@ -17,7 +17,8 @@ def get_iso3(country_name):
     except LookupError:
         return None  # Return None if country name is not found
 
-def clean(df, hts_num):
+def clean(hts_num):
+    df = pd.read_csv("Export_Data/exports_2024_"+str(hts_num)+".csv", header=1, usecols=[1,2,3,4,5,6,8])
     phrases = ["Total", "EUROPEAN UNION", "PACIFIC RIM COUNTRIES", "CAFTA-DR", "NAFTA", "TWENTY LATIN AMERICAN REPUBLICS", "OECD", "NATO", "LAFTA", "EURO AREA", "APEC", "ASEAN", "CACM",
            "NORTH AMERICA", "CENTRAL AMERICA", "SOUTH AMERICA", "EUROPE", "ASIA", "AFRICA", "OCEANIA", "MIDDLE EAST", "CARIBBEAN", "LOW VALUE", "MAIL SHIPMENTS"]
     df = df[~df.apply(lambda row: row.astype(str).str.contains("|".join(phrases), case=False, na=False).any(), axis=1)]
@@ -51,14 +52,14 @@ def clean(df, hts_num):
 
     #need to fix this so it works for ex and imports
     ######also lowkey maybe need to do containerized and plain vessel... still no real documentation on that
-    df.to_csv("Import_Data/exports_2024_"+str(hts_num)+".csv", index=False)
+    df.to_csv("Export_Data/exports_2024_"+str(hts_num)+".csv", index=False)
     return df
 
 
 
 def exp_plot(df, hts_name, vessel_type, fuel_type):
     
-    path_ne = "Maps/ne_50m_admin_0_countries.shp"
+    path_ne = "~Maps/ne_50m_admin_0_countries.shp"
 
     # Merge data with world dataset to get destination coordinates
     world = gpd.read_file(path_ne)
@@ -158,3 +159,5 @@ def exp_plot(df, hts_name, vessel_type, fuel_type):
     plt.title("Top 20 Marine Export Flows of " +hts_name+  " by g CO2 equivalent emissions")
     plt.savefig("draft_airplane_export_flow_"+hts_name+".png")
     
+
+clean(29)
