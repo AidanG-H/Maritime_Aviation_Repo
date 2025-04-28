@@ -50,7 +50,9 @@ def clean(df, hts_num):
     df = df.merge(port_coords, on="PORT_NAME", how="left")
 
     #need to fix this so it works for ex and imports
+    ######also lowkey maybe need to do containerized and plain vessel... still no real documentation on that
     df.to_csv("Import_Data/exports_2024_"+str(hts_num)+".csv", index=False)
     return df
 
+test = 0
 path_ne = "Maps/ne_50m_admin_0_countries.shp"
